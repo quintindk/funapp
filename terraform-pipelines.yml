@@ -6,6 +6,7 @@ pool:
 variables:
   - template: ./terraform-variables.yml
   - group: azure-service-principal
+  - group: azure-ad-users
   
 stages:
   - stage: Validate

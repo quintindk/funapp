@@ -14,7 +14,7 @@ steps:
       cat > ${{ parameters.working_dir }}/${{ parameters.environment }}.tfvars << EOF
       base_name="${{ parameters.base_name }}"
       environment="${{ parameters.environment_short }}"
-      tenant_id="${{ variables.ARM_TENANT_ID }}"
+      sql_ad_admin="${{ variables.sql_ad_admin }}"
       EOF
     displayName: "Create ${{ parameters.working_dir }}/.tfvars"
 
