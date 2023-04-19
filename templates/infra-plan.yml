@@ -39,7 +39,7 @@ steps:
       script: |
         echo "$(ARM_CLIENT_ID)"
         cd /var/build/${{ parameters.working_dir }}
-        terraform init -upgrade \                                        
+        terraform init -upgrade \
           -backend-config "resource_group_name=${{ parameters.resource_group_name }}" \
           -backend-config "storage_account_name=${{ parameters.storage_account_name }}" \
           -backend-config "container_name=${{ parameters.container_name }}" \
