@@ -14,7 +14,7 @@ resource "azurerm_mssql_server" "sql" {
   azuread_administrator {
     login_username = data.azuread_user.current.user_principal_name
     object_id      = data.azuread_user.current.object_id
-    tenant_id      = data.azuread_user.current.tenant_id
+    tenant_id      = data.azurerm_client_config.current.tenant_id
   }
 
   tags = var.tags
