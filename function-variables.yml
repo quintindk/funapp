@@ -7,17 +7,13 @@ variables:
   value: dotnet
 
 - name: resourceGroupName
-  ${{ if eq( variables['Build.SourceBranch'], 'dev') }}:
-    value: "rg-readintent-uat-001"
   ${{ if eq( variables['Build.SourceBranch'], 'main' ) }}:
     value: "rg-readintent-prod-001"
   ${{ if eq( variables['Build.Reason'], 'PullRequest') }}:
     value: "rg-readintent-dev-001"
 
 - name: subscriptionName
-  ${{ if eq( variables['Build.SourceBranch'], 'dev') }}:
-    value: "rg-readintent-uat-001"
   ${{ if eq( variables['Build.SourceBranch'], 'main' ) }}:
     value: "rg-readintent-prod-001"
-  ${{ if and(eq( variables['Build.Reason'], 'PullRequest'), ne(variables['Build.TargetBranch'], 'main')) }}:
+  ${{ if eq( variables['Build.Reason'], 'PullRequest') }}:
     value: "rg-readintent-dev-001"

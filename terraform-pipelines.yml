@@ -9,55 +9,71 @@ variables:
   - group: azure-ad-users
   
 stages:
-  - stage: Validate
-    jobs:
-      - job: TerraformValidate
-        steps:
-        - template: templates/infra-validate.yml
-          parameters:
-            working_dir: terraform
-        condition: succeeded()
+- stage: Prepare
+  jobs:
+  - job: CheckResourceGroupsAndStorage
+    steps:
+    - template: templates/infra-backend.yml
+      parameters:
+        resource_group_name: $(resource_group_name)
+        storage_account_name: $(storage_account_name)
+        location: $(location)
+        subscription: $(subscription)
 
-  - stage: Scan
-    dependsOn: [Validate]
-    jobs:
-      - job: TerraformSecurityScan
-        steps:
-        - template: templates/infra-test.yml
-        condition: succeeded()
+- stage: Validate
+  jobs:
+    - job: TerraformValidate
+      steps:
+      - template: templates/infra-validate.yml
+        parameters:
+          working_dir: terraform
+      condition: succeeded()
 
-  - stage: Plan
-    dependsOn: [Scan]
-    condition: |
-      in(dependencies.Validate.result, 'Succeeded')
-    jobs:
-      - job: TerraformPlan
-        steps:
-        - template: templates/infra-plan.yml
-          parameters:
-            working_dir: terraform
-            environment: $(environment)
-            environment_short: $(environment_abbr)
-            base_name: $(base_name)
-            sql_ad_admin: $(sql_ad_admin)
-        condition: succeeded()
-      
-  - stage: Deploy
-    dependsOn: [Plan]
-    condition: |
-      and(
-        in(dependencies.Plan.result, 'Succeeded'),
-        eq(dependencies.Plan.outputs['TerraformPlanShared.TerraformPlan.apply'], '1')
-      )
-    jobs:
-      - deployment: TerraformDeploy
-        environment: ${{ variables.environment }}
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-              - template: templates/infra-deploy.yml
-                parameters:
-                  working_dir: terraform
-                  environment: $(environment)
+- stage: Scan
+  dependsOn: [Validate]
+  jobs:
+    - job: TerraformSecurityScan
+      steps:
+      - template: templates/infra-test.yml
+      condition: succeeded()
+
+- stage: Plan
+  dependsOn: [Scan]
+  condition: |
+    in(dependencies.Validate.result, 'Succeeded')
+  jobs:
+    - job: TerraformPlan
+      steps:
+      - template: templates/infra-plan.yml
+        parameters:
+          working_dir: terraform
+          environment: $(environment)
+          environment_short: $(environment_abbr)
+          base_name: $(base_name)
+          sql_ad_admin: $(sql_ad_admin)
+          resource_group_name: $(resource_group_name)
+          storage_account_name: $(storage_account_name)
+          container_name: tfstate
+          key: readintent.tfstate
+  
+      condition: succeeded()
+    
+- stage: Deploy
+  dependsOn: [Plan]
+  condition: |
+    and(
+      in(dependencies.Plan.result, 'Succeeded'),
+      eq(dependencies.Plan.outputs['TerraformPlanShared.TerraformPlan.apply'], '1')
+    )
+  jobs:
+    - deployment: TerraformDeploy
+      environment: ${{ variables.environment }}
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - template: templates/infra-deploy.yml
+              parameters:
+                working_dir: terraform
+                environment: $(environment)
 

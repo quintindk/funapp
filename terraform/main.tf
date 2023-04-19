@@ -12,6 +12,8 @@ terraform {
       version = "2.37.1"
     }
   }
+  backend "azurerm" {
+  }
 }
 
 # Random provider

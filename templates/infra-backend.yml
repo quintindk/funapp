@@ -1,0 +1,26 @@
+parameters:
+  resource_group_name:
+  storage_account_name:
+  location:
+  container: "tfstate"
+  subscription: 
+
+steps:
+  - task: AzureCLI@2
+    displayName: Azure CLI
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        EXISTS=$(az group exists -n ${{ parameters.rg_name }})
+        echo $EXISTS
+        if [ $EXISTS = "false" ]
+        then
+            echo "Creating shared resource group"
+            az group create --name ${{ parameters.rg_name }} --location ${{ parameters.location }}
+            az storage account create --name ${{ parameters.storage_account_name }} --resource-group ${{ parameters.rg_name }}
+            az storage container create --name ${{ parameters.container }} --account-name ${{ parameters.storage_account_name }}
+        else
+            echo "Resource group exists"
+        fi
