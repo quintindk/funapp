@@ -6,6 +6,7 @@ pool:
 variables:
   - template: ./terraform-variables.yml
   - group: azure-service-principal
+  - group: azure-terraform-backend
   - group: azure-ad-users
   
 stages:
@@ -18,7 +19,7 @@ stages:
         resource_group_name: $(resource_group_name)
         storage_account_name: $(storage_account_name)
         location: $(location)
-        subscription: ${{ variables.subscription }}
+        subscription: $(subscription)
 
 - stage: Validate
   jobs:
