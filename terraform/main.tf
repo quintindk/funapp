@@ -23,7 +23,9 @@ provider "azurerm" {
 }
 
 # Azure Active Directory
-provider "azuread" {}
+provider "azuread" {
+  tenant_id = var.tenant_id
+}
 
 data "azurerm_client_config" "current" {}
 
