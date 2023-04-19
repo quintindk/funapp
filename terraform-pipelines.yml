@@ -4,7 +4,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  - template: ./terraform-variables.yaml
+  - template: ./terraform-variables.yml
   - group: azure-service-principal
   
 stages:
