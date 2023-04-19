@@ -6,6 +6,7 @@ parameters:
   subscription: 
 
 steps:
+  - bash: echo "The subscription is ${{ parameters.subscription }}, good luck!"
   - task: AzureCLI@2
     displayName: Azure CLI
     inputs:

@@ -63,7 +63,7 @@ stages:
   condition: |
     and(
       in(dependencies.Plan.result, 'Succeeded'),
-      eq(dependencies.Plan.outputs['TerraformPlanShared.TerraformPlan.apply'], '1')
+      eq(dependencies.Plan.outputs['TerraformPlan.TerraformPlan.apply'], '1')
     )
   jobs:
     - deployment: TerraformDeploy
