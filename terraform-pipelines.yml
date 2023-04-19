@@ -18,7 +18,7 @@ stages:
         resource_group_name: $(resource_group_name)
         storage_account_name: $(storage_account_name)
         location: $(location)
-        subscription: $(subscription)
+        subscription: ${{ variables.subscription }}
 
 - stage: Validate
   jobs:
