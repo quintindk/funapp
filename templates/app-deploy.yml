@@ -1,0 +1,42 @@
+parameters:
+- name: environment
+  type: string
+  default: Development
+- name: appName
+  type: string
+- name: appType
+  type: string
+  default: functionAppLinux
+- name: resourceGroupName
+  type: string
+- name: subscriptionName
+  type: string
+
+jobs:
+- job: DeployFunctionApp
+  displayName: "Deploy to Slot"
+  steps:
+  - task: AzureFunctionApp@1
+    inputs:
+      azureSubscription: ${{ parameters.subscriptionName }}
+      appType: functionAppLinux
+      appName: ${{ parameters.appName }}
+      package: $(System.ArtifactsDirectory)/**/*.zip
+      deployToSlotOrASE: true
+      resourceGroupName: ${{ parameters.resourceGroupName }}
+      slotName: staging
+
+- deployment: GoLiveWithSlot
+  displayName: "Make Slot Live"
+  environment: ${{ parameters.environment }}
+  strategy:
+    runOnce: #rolling, canary are the other strategies that are supported
+      deploy:
+        steps:      
+        - task: AzureAppServiceManage@0
+          inputs:
+            azureSubscription: ${{ parameters.subscriptionName }}
+            WebAppName: ${{ parameters.appName }}
+            ResourceGroupName: ${{ parameters.resourceGroupName }}
+            SourceSlot: staging
+            SwapWithProduction: true

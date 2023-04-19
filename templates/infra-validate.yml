@@ -1,0 +1,31 @@
+parameters:
+  working_dir: 
+
+steps:
+  - task: TerraformInstaller@0
+    displayName: install terraform
+    inputs:
+        terraformVersion: 1.4.5
+
+  - bash: |
+      cd ${{ parameters.working_dir }}
+      terraform init -backend=false
+      
+    displayName: "Terraform Init"
+  - bash: |
+      terraform validate
+      RESULT=$?
+      echo $RESULT
+      if [[ $RESULT -eq 0 ]]
+      then
+        echo 'Success'
+      elif [[ $RESULT -eq 2 ]]
+      then
+        echo 'Failed'
+        exit 1
+      else
+        echo "An error has occurred"
+        exit 1
+      fi
+    name: Validate
+    displayName: "Terraform Validate"

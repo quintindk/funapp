@@ -1,0 +1,80 @@
+parameters:
+  working_dir:
+  environment:
+  environment_short:
+  base_name: 
+
+steps:
+  - task: TerraformInstaller@0
+    displayName: install terraform
+    inputs:
+        terraformVersion: 1.4.5
+
+  - bash: | 
+      cat > ${{ parameters.working_dir }}/${{ parameters.environment }}.tfvars << EOF
+      base_name="${{ parameters.base_name }}"
+      environment="${{ parameters.environment_short }}"
+      EOF
+    displayName: "Create ${{ parameters.working_dir }}/.tfvars"
+
+  - task: Bash@3
+    displayName: "Copy Sources"
+    inputs:
+      targetType: 'inline'
+      script: |
+        sudo mkdir /var/build
+        sudo cp -R $(Build.SourcesDirectory)/* /var/build/
+        sudo chown -R vsts:vsts /var/build
+
+  - task: Bash@3
+    displayName: "Terraform Init"
+    inputs:
+      targetType: 'inline'
+      script: |
+        echo "$(ARM_CLIENT_ID)"
+        cd /var/build/${{ parameters.working_dir }}
+        terraform init
+    env:
+      ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+      ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+      ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+      ARM_TENANT_ID: $(ARM_TENANT_ID)
+
+  - task: Bash@3
+    name: TerraformPlan
+    displayName: "Terraform Plan"
+    inputs:
+      targetType: 'inline'
+      script: |
+        cd /var/build/${{ parameters.working_dir }}
+        terraform workspace new ${{ parameters.environment }} 
+        terraform workspace select ${{ parameters.environment }} 
+        terraform plan \
+          -var-file ${{ parameters.environment }}.tfvars \
+          -detailed-exitcode \
+          -out tf.plan
+        RESULT=$?
+        echo $RESULT
+        if [[ $RESULT -eq 0 ]]
+        then
+          echo 'No changes'
+        elif [[ $RESULT -eq 2 ]]
+        then
+          echo 'Changes found'
+          echo "##vso[task.setvariable variable=apply;isOutput=true]1"
+        else
+          echo "An error has occurred"
+          exit 1
+        fi
+    env:
+      ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+      ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+      ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+      ARM_TENANT_ID: $(ARM_TENANT_ID)
+
+  - task: PublishPipelineArtifact@1
+    displayName: "Publish Build"
+    inputs:
+      targetPath: '/var/build/${{ parameters.working_dir }}'
+      artifact: '${{ parameters.working_dir }}'
+      publishLocation: 'pipeline'

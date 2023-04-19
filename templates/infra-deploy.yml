@@ -1,0 +1,53 @@
+parameters:
+  working_dir:
+  environment:
+
+steps:
+  - task: TerraformInstaller@0
+    displayName: install terraform
+    inputs:
+        terraformVersion: 1.4.5
+
+  - task: Bash@3
+    displayName: "Create Build Directory"
+    inputs:
+      targetType: 'inline'
+      script: |
+        sudo mkdir /var/build
+        sudo chown -R vsts:vsts /var/build
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      buildType: 'current'
+      artifactName: '${{ parameters.working_dir }}'
+      targetPath: '/var/build/${{ parameters.working_dir }}'
+
+  - task: Bash@3
+    displayName: "Fix Permissions"
+    inputs:
+      targetType: 'inline'
+      script: |
+        sudo chown -R vsts:vsts /var/build
+        if [ -d "/var/build/${{ parameters.working_dir }}/.terraform/plugins" ]
+        then
+          sudo find /var/build/${{ parameters.working_dir }}/.terraform/plugins/ -type f -iname "terraform-provider*" -exec chmod +x {} \;
+        fi
+        if [ -d "/var/build/${{ parameters.working_dir }}/.terraform/providers" ]
+        then
+          sudo find /var/build/${{ parameters.working_dir }}/.terraform/providers/ -type f -iname "terraform-provider*" -exec chmod +x {} \;
+        fi
+
+  - task: Bash@3
+    displayName: "Terraform Apply"
+    inputs:
+      targetType: 'inline'
+      script: |
+        ls -lah
+        cd /var/build/${{ parameters.working_dir }}
+        terraform workspace select ${{ parameters.environment }}
+        terraform apply tf.plan
+    env:
+      ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+      ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+      ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+      ARM_TENANT_ID: $(ARM_TENANT_ID)

@@ -1,0 +1,29 @@
+trigger: 
+  - main
+  - dev
+pr:
+  - dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  template: azure-variables.yml
+
+stages:
+- stage: BuildApplication
+  displayName: Build
+  jobs:
+  - template: templates/build.yaml
+    parameters:
+      framework: $(framework)
+      
+- stage: DeployApplication
+  displayName: Deploy
+  jobs:
+  - template: templates/deploy.yaml
+    parameters:
+      environment: $(environment)
+      appName: $(appName)
+      resourceGroupName: $(resourceGroupName)
+      subscriptionName: $(subscriptionName)

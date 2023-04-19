@@ -1,0 +1,31 @@
+parameters:
+  analyzer: checkov
+  failTaskOnFailedTests: false
+
+steps:
+  - ${{ if eq(parameters.analyzer, 'tfsec') }}:
+    - bash: |
+        mkdir terraform_report
+        docker run --rm -t -v $(System.DefaultWorkingDirectory):/src tfsec/tfsec /src --format JUnit > terraform_report/junit.xml || EXIT_CODE=$?
+        sed -i 's/^WARNING:*//g' terraform_report/junit.xml
+        echo $EXIT_CODE
+      displayName: Static Code Analysis
+
+  - ${{ if eq(parameters.analyzer, 'checkov') }}:
+    - bash: |
+        mkdir terraform_report
+        docker run --volume $(System.DefaultWorkingDirectory):/tf bridgecrew/checkov --directory /tf --output junitxml > terraform_report/junit.xml || EXIT_CODE=$?
+        echo $EXIT_CODE
+      displayName: Static Code Analysis
+
+  - task: PublishTestResults@2
+    displayName: Publish Test Results
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: '**/junit.xml'
+      searchFolder: $(System.DefaultWorkingDirectory)/terraform_report/
+      mergeTestResults: false
+      failTaskOnFailedTests: ${{ parameters.failTaskOnFailedTests }}
+      publishRunAttachments: true
+
