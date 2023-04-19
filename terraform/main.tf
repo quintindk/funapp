@@ -30,6 +30,6 @@ provider "azuread" {}
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "rg" {
-  name = "rg-${var.base_name}-${var.environment}-${format("%0d",var.base_instance)}"
+  name = "rg-${var.base_name}-${var.environment}-${format("%02s",var.base_instance)}"
   location = var.location
 }

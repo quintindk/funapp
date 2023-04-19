@@ -22,7 +22,6 @@ resource "azurerm_mssql_server" "sql" {
 resource "azurerm_mssql_database" "sql" {
   name      = "blogging"
   server_id = azurerm_mssql_server.sql.id
-  max_size_gb        = 4
   read_scale         = true
   read_replica_count = 1
   sku_name           = "P2"

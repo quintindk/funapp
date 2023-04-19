@@ -1,6 +1,6 @@
 ##### KEY VAULT
 resource "azurerm_key_vault" "kv" {
-  name                        = "kv-${var.base_name}-${var.environment}-${format("%0d",var.base_instance)}"
+  name                        = "kv-${var.base_name}-${var.environment}-${format("%02s",var.base_instance)}"
   location                    = azurerm_resource_group.rg.location
   resource_group_name         = azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
