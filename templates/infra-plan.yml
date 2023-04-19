@@ -3,7 +3,8 @@ parameters:
   environment:
   environment_short:
   base_name: 
-
+  sql_ad_admin:
+  
 steps:
   - task: TerraformInstaller@0
     displayName: install terraform
@@ -14,7 +15,7 @@ steps:
       cat > ${{ parameters.working_dir }}/${{ parameters.environment }}.tfvars << EOF
       base_name="${{ parameters.base_name }}"
       environment="${{ parameters.environment_short }}"
-      sql_ad_admin="${{ variables.sql_ad_admin }}"
+      sql_ad_admin="${{ parameters.sql_ad_admin }}"
       EOF
     displayName: "Create ${{ parameters.working_dir }}/.tfvars"
 

@@ -27,7 +27,7 @@ stages:
         condition: succeeded()
 
   - stage: Plan
-    dependsOn: [Validate]
+    dependsOn: [Scan]
     condition: |
       in(dependencies.Validate.result, 'Succeeded')
     jobs:
@@ -39,6 +39,7 @@ stages:
             environment: $(environment)
             environment_short: $(environment_abbr)
             base_name: $(base_name)
+            sql_ad_admin: $(sql_ad_admin)
         condition: succeeded()
       
   - stage: Deploy
