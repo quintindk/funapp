@@ -1,23 +1,12 @@
 variables:
-- name: environment
-  value: Development
-- name: appName
-  value: ReadIntent
-- name: framework
-  value: dotnet
+  environment: Development
+  app_name: ReadIntent
+  framework: dotnet
 
-- name: resourceGroupName
-  ${{ if eq( variables['Build.SourceBranch'], 'dev') }}:
-    value: "rg-readintent-uat-001"
   ${{ if eq( variables['Build.SourceBranch'], 'main' ) }}:
-    value: "rg-readintent-prod-001"
+    subscription: Production
+    resource_group_name: "rg-readintent-prod-01"
+    
   ${{ if eq( variables['Build.Reason'], 'PullRequest') }}:
-    value: "rg-readintent-dev-001"
-
-- name: subscriptionName
-  ${{ if eq( variables['Build.SourceBranch'], 'dev') }}:
-    value: "rg-readintent-uat-001"
-  ${{ if eq( variables['Build.SourceBranch'], 'main' ) }}:
-    value: "rg-readintent-prod-001"
-  ${{ if and(eq( variables['Build.Reason'], 'PullRequest'), ne(variables['Build.TargetBranch'], 'main')) }}:
-    value: "rg-readintent-dev-001"
+    subscription: Development
+    resource_group_name: "rg-readintent-dev-01"

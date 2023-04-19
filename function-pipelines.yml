@@ -1,8 +1,7 @@
 trigger: 
   - main
-  - dev
 pr:
-  - dev
+  - main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -24,6 +23,6 @@ stages:
   - template: templates/deploy.yaml
     parameters:
       environment: $(environment)
-      appName: $(appName)
-      resourceGroupName: $(resourceGroupName)
-      subscriptionName: $(subscriptionName)
+      app_name: $(app_name)
+      resource_group_name: $(resource_group_name)
+      subscription: $(subscription)

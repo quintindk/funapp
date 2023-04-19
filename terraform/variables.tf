@@ -20,3 +20,6 @@ variable "tags" {
   type = map(string)
   default = {}
 }
+variable "sql_ad_admin" {
+  type = string
+}

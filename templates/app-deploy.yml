@@ -1,16 +1,9 @@
 parameters:
-- name: environment
-  type: string
-  default: Development
-- name: appName
-  type: string
-- name: appType
-  type: string
-  default: functionAppLinux
-- name: resourceGroupName
-  type: string
-- name: subscriptionName
-  type: string
+  environment: Development
+  app_name:
+  app_type: functionAppLinux
+  resource_group_name:
+  subscription:
 
 jobs:
 - job: DeployFunctionApp
@@ -18,12 +11,12 @@ jobs:
   steps:
   - task: AzureFunctionApp@1
     inputs:
-      azureSubscription: ${{ parameters.subscriptionName }}
+      azureSubscription: ${{ parameters.subscription }}
       appType: functionAppLinux
-      appName: ${{ parameters.appName }}
+      appName: ${{ parameters.app_name }}
       package: $(System.ArtifactsDirectory)/**/*.zip
       deployToSlotOrASE: true
-      resourceGroupName: ${{ parameters.resourceGroupName }}
+      resourceGroupName: ${{ parameters.resource_group_name }}
       slotName: staging
 
 - deployment: GoLiveWithSlot
