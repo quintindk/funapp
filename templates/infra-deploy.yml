@@ -4,7 +4,7 @@ parameters:
 
 steps:
   - task: TerraformInstaller@0
-    displayName: install terraform
+    displayName: Install terraform
     inputs:
         terraformVersion: 1.4.5
 

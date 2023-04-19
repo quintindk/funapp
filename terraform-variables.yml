@@ -5,7 +5,7 @@ variables:
     subscription: Development
     environment: Development
     environment_abbr: dev
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  ${{ if or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'PullRequest')) }}:
     subscription: Production
     environment: Production
     environment_abbr: prd  
