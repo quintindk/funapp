@@ -21,7 +21,7 @@ steps:
       environment="${{ parameters.environment_short }}"
       sql_ad_admin="${{ parameters.sql_ad_admin }}"
       EOF
-    displayName: "Create ${{ parameters.working_dir }}/.tfvars"
+    displayName: "Create ${{ parameters.working_dir }}/${{ parameters.environment }}.tfvars"
 
   - task: Bash@3
     displayName: "Copy Sources"
