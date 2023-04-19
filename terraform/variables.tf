@@ -1,6 +1,3 @@
-variable "tenant_id" {
-  type = string
-}
 variable "location" {
   type = string
   default = "westeurope"
@@ -22,4 +19,7 @@ variable "sql_username" {
 variable "tags" {
   type = map(string)
   default = {}
+}
+variable "sql_ad_admin" {
+  type = string
 }

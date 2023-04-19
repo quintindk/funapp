@@ -1,6 +1,6 @@
 #### SQL
-data "azuread_user" "current" {
-  object_id = data.azurerm_client_config.current.object_id
+data "azuread_user" "sql_ad_admin" {
+  user_principal_name = var.sql_ad_admin
 }
 
 resource "azurerm_mssql_server" "sql" {
@@ -12,9 +12,8 @@ resource "azurerm_mssql_server" "sql" {
   administrator_login_password = azurerm_key_vault_secret.sql_password.value
 
   azuread_administrator {
-    login_username = data.azuread_user.current.user_principal_name
-    object_id      = data.azuread_user.current.object_id
-    tenant_id      = data.azurerm_client_config.current.tenant_id
+    login_username = data.azuread_user.sql_ad_admin.user_principal_name
+    object_id      = data.azuread_user.sql_ad_admin.object_id
   }
 
   tags = var.tags
