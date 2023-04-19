@@ -1,15 +1,12 @@
 variables:
-- name: base_name
-  value: readintent
+  base_name: readintent
 
-- name: environment
 - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
-  value: Development
+  environment: Development
 - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-  value: Production
+  environment: Production
 
-- name: environment_abbr
 - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
-  value: dev
+  environment_abbr: dev
 - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-  value: prd
+  environment_abbr: prd
