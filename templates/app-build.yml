@@ -1,10 +1,5 @@
 parameters:
-- name: framework
-  type: string
-  default: dotnet
-  values:
-    - dotnet
-    - nodejs
+- framework: dotnet
 
 jobs:
 - job: BuildAndTest
