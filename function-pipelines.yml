@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  template: function-variables.yml
+- template: function-variables.yml
 
 stages:
 - stage: BuildApplication
