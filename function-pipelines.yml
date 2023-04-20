@@ -19,6 +19,8 @@ stages:
 
 - stage: DeployApplication
   displayName: Deploy
+  dependsOn: [BuildApplication]
+  condition: succeeded()
   jobs:
   - template: templates/app-deploy.yml
     parameters:
