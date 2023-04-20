@@ -1,13 +1,14 @@
 variables:
-  app_name: ReadIntent
   framework: dotnet
 
   ${{ if eq( variables['Build.SourceBranch'], 'main' ) }}:
+    app_name: "func-linux-readintent-prd"
     environment: Production
     subscription: Production
     resource_group_name: "rg-readintent-prod-01"
     
   ${{ if eq( variables['Build.Reason'], 'PullRequest') }}:
+    app_name: "func-linux-readintent-dev"
     environment: Development
     subscription: Development
     resource_group_name: "rg-readintent-dev-01"
