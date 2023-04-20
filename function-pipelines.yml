@@ -16,6 +16,7 @@ stages:
   - template: templates/app-build.yml
     parameters:
       framework: $(framework)
+      working_dir: ReadIntent
 
 - stage: DeployApplication
   displayName: Deploy

@@ -1,11 +1,13 @@
 parameters:
   framework: dotnet
+  working_dir: 
 
 jobs:
 - job: BuildAndTest
   displayName: Build and Test
   steps:
   - script: |
+      cd ${{ parameters.working_dir }}
       dotnet restore
       dotnet build --configuration Release
   - task: DotNetCoreCLI@2
