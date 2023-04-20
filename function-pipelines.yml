@@ -18,9 +18,21 @@ stages:
       framework: $(framework)
       working_dir: ReadIntent
 
+- stage: DeploySlot
+  displayName: Slot
+  dependsOn: [BuildApplication]
+  condition: succeeded()
+  jobs:
+  - template: templates/app-test-deploy.yml
+    parameters:
+      environment: $(environment)
+      app_name: $(app_name)
+      resource_group_name: $(resource_group_name)
+      subscription: $(subscription)
+
 - stage: DeployApplication
   displayName: Deploy
-  dependsOn: [BuildApplication]
+  dependsOn: [DeploySlot]
   condition: succeeded()
   jobs:
   - template: templates/app-deploy.yml
