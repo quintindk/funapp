@@ -18,13 +18,14 @@ jobs:
       publishWebProjects: false
       modifyOutputPath: false
       zipAfterPublish: false
+      workingDirectory: ${{ parameters.working_dir }}
   - task: ArchiveFiles@2
     displayName: "Archive files"
     inputs:
-      rootFolderOrFile: "$(System.DefaultWorkingDirectory)/publish_output"
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)/${{ parameters.working_dir }}/publish_output"
       includeRootFolder: false
-      archiveFile: "$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip"
+      archiveFile: "$(System.DefaultWorkingDirectory)/${{ parameters.working_dir }}/build$(Build.BuildId).zip"
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
+      PathtoPublish: "$(System.DefaultWorkingDirectory)/${{ parameters.working_dir }}/build$(Build.BuildId).zip"
       artifactName: 'drop'
