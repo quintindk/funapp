@@ -13,14 +13,14 @@ stages:
 - stage: BuildApplication
   displayName: Build
   jobs:
-  - template: templates/app-build.yaml
+  - template: templates/app-build.yml
     parameters:
       framework: $(framework)
 
 - stage: DeployApplication
   displayName: Deploy
   jobs:
-  - template: templates/app-deploy.yaml
+  - template: templates/app-deploy.yml
     parameters:
       environment: $(environment)
       app_name: $(app_name)
