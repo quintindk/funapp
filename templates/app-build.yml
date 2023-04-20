@@ -1,5 +1,5 @@
 parameters:
-- framework: dotnet
+  framework: dotnet
 
 jobs:
 - job: BuildAndTest
