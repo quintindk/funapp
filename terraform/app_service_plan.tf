@@ -29,9 +29,8 @@ resource "azurerm_user_assigned_identity" "func_user" {
 
 resource "azurerm_linux_function_app" "func_linux" {
   name                        = "func-linux-${var.base_name}-${var.environment}"
-  location                    = var.region
-  resource_group_name         = module.rg_bidvestbank_staging.name
-
+  resource_group_name         = azurerm_resource_group.rg.name
+  location                    = azurerm_resource_group.rg.location
   storage_account_name        = azurerm_storage_account.apps_storage.name
   storage_account_access_key  = azurerm_storage_account.apps_storage.primary_access_key
   service_plan_id             = azurerm_service_plan.func_apps.id
