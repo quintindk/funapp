@@ -41,7 +41,9 @@ resource "azurerm_linux_function_app" "func_linux" {
   }
 
   site_config {
-
+    application_stack {
+      dotnet_version = "6.0"
+    }
   }
 
   https_only = true
@@ -49,12 +51,19 @@ resource "azurerm_linux_function_app" "func_linux" {
   tags = var.tags
 }
 
-resource "azurerm_function_app_slot" "staging" {
+resource "azurerm_linux_function_app_slot" "staging" {
   name                        = "staging"
-  resource_group_name         = azurerm_resource_group.rg.name
-  location                    = azurerm_resource_group.rg.location
-  app_service_plan_id         = azurerm_service_plan.func_apps.id
-  function_app_name           = azurerm_linux_function_app.func_linux.name
+  function_app_id             = azurerm_linux_function_app.func_linux.id
   storage_account_name        = azurerm_storage_account.apps_storage.name
   storage_account_access_key  = azurerm_storage_account.apps_storage.primary_access_key
+
+  site_config {
+    application_stack {
+      dotnet_version = "6.0"
+    }
+  }
+
+  https_only = true
+
+  tags = var.tags
 }
