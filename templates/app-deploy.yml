@@ -1,7 +1,6 @@
 parameters:
   environment: Development
   app_name:
-  app_type: functionAppLinux
   resource_group_name:
   subscription:
 
@@ -15,8 +14,8 @@ jobs:
         steps:      
         - task: AzureAppServiceManage@0
           inputs:
-            azureSubscription: ${{ parameters.subscriptionName }}
-            WebAppName: ${{ parameters.appName }}
-            ResourceGroupName: ${{ parameters.resourceGroupName }}
+            azureSubscription: ${{ parameters.subscription }}
+            WebAppName: ${{ parameters.app_name }}
+            ResourceGroupName: ${{ parameters.resource_group_name }}
             SourceSlot: staging
             SwapWithProduction: true
