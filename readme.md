@@ -46,3 +46,10 @@ Run your function by starting the local Azure Functions runtime host from the Lo
 ```powershell
 func start
 ```
+
+## Setup Azure DevOps
+
+### Variable Groups
+
+### Service Connection
+
