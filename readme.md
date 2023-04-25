@@ -1,5 +1,8 @@
 # Funapp - An Azure Function App template Pipeline
 
+[![Infrastructure](https://dev.azure.com/quintindk/FunApp/_apis/build/status%2Fquintindk.funapp?branchName=refs%2Fpull%2F5%2Fmerge)](https://dev.azure.com/quintindk/FunApp/_build/latest?definitionId=1&branchName=refs%2Fpull%2F5%2Fmerge)
+[![Code](https://dev.azure.com/quintindk/FunApp/_apis/build/status%2Fquintindk.funapp%20(1)?branchName=refs%2Fpull%2F5%2Fmerge)](https://dev.azure.com/quintindk/FunApp/_build/latest?definitionId=2&branchName=refs%2Fpull%2F5%2Fmerge)
+
 This repository contains the base files and instructions to create a funapp i.e An Azure Function App in different languages.
 
 ## Getting Started
@@ -43,3 +46,10 @@ Run your function by starting the local Azure Functions runtime host from the Lo
 ```powershell
 func start
 ```
+
+## Setup Azure DevOps
+
+### Variable Groups
+
+### Service Connection
+

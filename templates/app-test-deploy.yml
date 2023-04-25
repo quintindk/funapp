@@ -1,0 +1,25 @@
+parameters:
+  environment: Development
+  app_name:
+  app_type: functionAppLinux
+  resource_group_name:
+  subscription:
+
+jobs:
+- job: DeployFunctionApp
+  displayName: "Deploy to Slot"
+  steps:
+  - task: DownloadBuildArtifacts@1
+    inputs:
+      artifactName: 'drop'
+      downloadPath: '$(System.ArtifactsDirectory)' 
+      
+  - task: AzureFunctionApp@1
+    inputs:
+      azureSubscription: ${{ parameters.subscription }}
+      appType: functionAppLinux
+      appName: ${{ parameters.app_name }}
+      package: $(System.ArtifactsDirectory)/**/*.zip
+      deployToSlotOrASE: true
+      resourceGroupName: ${{ parameters.resource_group_name }}
+      slotName: staging

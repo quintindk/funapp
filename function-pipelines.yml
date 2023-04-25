@@ -7,7 +7,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  template: azure-variables.yml
+- template: function-variables.yml
 
 stages:
 - stage: BuildApplication
@@ -16,9 +16,24 @@ stages:
   - template: templates/app-build.yml
     parameters:
       framework: $(framework)
+      working_dir: ReadIntent
+
+- stage: DeploySlot
+  displayName: Slot
+  dependsOn: [BuildApplication]
+  condition: succeeded()
+  jobs:
+  - template: templates/app-test-deploy.yml
+    parameters:
+      environment: $(environment)
+      app_name: $(app_name)
+      resource_group_name: $(resource_group_name)
+      subscription: $(subscription)
 
 - stage: DeployApplication
   displayName: Deploy
+  dependsOn: [DeploySlot]
+  condition: succeeded()
   jobs:
   - template: templates/app-deploy.yml
     parameters:

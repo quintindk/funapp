@@ -1,24 +1,10 @@
 parameters:
   environment: Development
   app_name:
-  app_type: functionAppLinux
   resource_group_name:
   subscription:
 
 jobs:
-- job: DeployFunctionApp
-  displayName: "Deploy to Slot"
-  steps:
-  - task: AzureFunctionApp@1
-    inputs:
-      azureSubscription: ${{ parameters.subscription }}
-      appType: functionAppLinux
-      appName: ${{ parameters.app_name }}
-      package: $(System.ArtifactsDirectory)/**/*.zip
-      deployToSlotOrASE: true
-      resourceGroupName: ${{ parameters.resource_group_name }}
-      slotName: staging
-
 - deployment: GoLiveWithSlot
   displayName: "Make Slot Live"
   environment: ${{ parameters.environment }}
@@ -28,8 +14,8 @@ jobs:
         steps:      
         - task: AzureAppServiceManage@0
           inputs:
-            azureSubscription: ${{ parameters.subscriptionName }}
-            WebAppName: ${{ parameters.appName }}
-            ResourceGroupName: ${{ parameters.resourceGroupName }}
+            azureSubscription: ${{ parameters.subscription }}
+            WebAppName: ${{ parameters.app_name }}
+            ResourceGroupName: ${{ parameters.resource_group_name }}
             SourceSlot: staging
             SwapWithProduction: true
