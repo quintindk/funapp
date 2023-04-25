@@ -49,8 +49,8 @@ resource "azurerm_linux_function_app" "func_linux" {
   tags = var.tags
 }
 
-resource "azurerm_function_app_slot" "example" {
-  name                        = "func-linux-${var.base_name}-${var.environment}_staging"
+resource "azurerm_function_app_slot" "staging" {
+  name                        = "staging"
   resource_group_name         = azurerm_resource_group.rg.name
   location                    = azurerm_resource_group.rg.location
   app_service_plan_id         = azurerm_service_plan.func_apps.id
