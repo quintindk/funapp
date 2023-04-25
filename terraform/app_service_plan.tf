@@ -46,11 +46,6 @@ resource "azurerm_linux_function_app" "func_linux" {
     }
   }
   
-  app_settings {
-    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "true"
-    "WEBSITE_ENABLE_SYNC_UPDATE_SITE"     = "true"
-  }
-
   https_only = true
 
   tags = var.tags
@@ -66,11 +61,6 @@ resource "azurerm_linux_function_app_slot" "staging" {
     application_stack {
       dotnet_version = "6.0"
     }
-  }
-
-  app_settings {
-    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "true"
-    "WEBSITE_ENABLE_SYNC_UPDATE_SITE"     = "true"
   }
 
   https_only = true
