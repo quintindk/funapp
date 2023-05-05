@@ -16,14 +16,13 @@ jobs:
     displayName: 'dotnet build'
     inputs:
       command: 'build'
-      configuration: $(buildConfiguration)
       workingDirectory: ${{ parameters.working_dir }}
     
   - task: DotNetCoreCLI@2
     displayName: 'dotnet test'
     inputs:
       command: 'test'
-      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+      arguments: '--collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
       publishTestResults: true
       workingDirectory: ${{ parameters.working_dir }}
     
