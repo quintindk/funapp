@@ -6,7 +6,7 @@ namespace DataAccess
 {
   public partial class SqlBloggingContext : BloggingContext
   {
-    private readonly string? _connectionString;
+    private readonly string _connectionString;
 
     public SqlBloggingContext(IConfiguration config) {
       _connectionString = config.GetConnectionString("SqlServerConnectionString");

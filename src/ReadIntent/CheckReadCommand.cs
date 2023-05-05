@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using System.Linq;
 
 namespace ReadIntent
@@ -16,13 +15,10 @@ namespace ReadIntent
   public class CheckReadCommand
   {
     private readonly IConfiguration _configuration;
-    private readonly IConfigurationRefresher _configurationRefresher;
-
-    public CheckReadCommand(IConfiguration configuration, IConfigurationRefresherProvider refresherProvider)
+    
+    public CheckReadCommand(IConfiguration configuration)
     {
       _configuration = configuration;
-      _configurationRefresher = refresherProvider.Refreshers.First();
-
     }
 
     [FunctionName("CheckReadCommandWithIntent")]
@@ -31,8 +27,6 @@ namespace ReadIntent
         ILogger log)
     {
       log.LogInformation("C# HTTP trigger function processed a request.");
-
-      await _configurationRefresher.TryRefreshAsync(); 
 
 
       string name = req.Query["name"];
@@ -55,8 +49,6 @@ namespace ReadIntent
     {
       log.LogInformation("C# HTTP trigger function processed a request.");
 
-      await _configurationRefresher.TryRefreshAsync(); 
-      
       string name = req.Query["name"];
 
       string requestBody = await new StreamReader(req.Body).ReadToEndAsync();

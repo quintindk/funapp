@@ -24,7 +24,9 @@ sudo apt-get install azure-functions-core-tools-4
 winget install Microsoft.AzureFunctionsCoreTools
 ```
 
-## Create your Project
+## Get you Function App Up
+
+### Create your Project
 
 To to create the project you can just follow the guide [here](https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-cli-csharp?tabs=azure-cli%2Cin-process).
 
@@ -39,7 +41,7 @@ Then you can simply Add a function to your project by using the following comman
 func new --name TestHttpExample --template "HTTP trigger" --authlevel "anonymous"
 ```
 
-## Run your Function locally
+### Run your Function locally
 
 Run your function by starting the local Azure Functions runtime host from the LocalFunctionProj folder:
 
@@ -53,3 +55,12 @@ func start
 
 ### Service Connection
 
+## Taking is further
+
+If your function is App is an API like mine you can implement OpenAPI support. This is very handy when integrating with API management (which I'll add at some point.) The steps below are referenced from [here](https://github.com/Azure/azure-functions-openapi-extension/blob/main/docs/enable-open-api-endpoints-in-proc.md)
+
+### Enable OpenAPI Document
+
+```bash
+dotnet add package Microsoft.Azure.WebJobs.Extensions.OpenApi
+```

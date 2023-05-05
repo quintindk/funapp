@@ -6,7 +6,7 @@ namespace DataAccess
 {
   public partial class SqliteBloggingContext : BloggingContext
   {
-    private readonly string? _connectionString;
+    private readonly string _connectionString;
 
     public SqliteBloggingContext(IConfiguration config) {
       _connectionString = config.GetConnectionString("SqliteConnectionString");
