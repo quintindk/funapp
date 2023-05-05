@@ -6,11 +6,18 @@ jobs:
 - job: BuildAndTest
   displayName: Build and Test
   steps:
+  - task: UseDotNet@2
+    displayName: 'install dotnet 6.x'
+    inputs:
+      version: 6.x
+      performMultiLevelLookup: true
+
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
     inputs:
       command: 'build'
       configuration: $(buildConfiguration)
+      workingDirectory: ${{ parameters.working_dir }}: 
     
   - task: DotNetCoreCLI@2
     displayName: 'dotnet test'
@@ -18,7 +25,8 @@ jobs:
       command: 'test'
       arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
       publishTestResults: true
-      projects: 'MyTestLibrary' # update with your test project directory
+      workingDirectory: ${{ parameters.working_dir }}
+      projects: 'Tests' # update with your test project directory
     
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage report'

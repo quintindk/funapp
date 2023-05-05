@@ -16,7 +16,7 @@ stages:
   - template: templates/app-build.yml
     parameters:
       framework: $(framework)
-      working_dir: src/ReadIntent
+      working_dir: src
 
 - stage: DeploySlot
   displayName: Slot
