@@ -31,7 +31,7 @@
       },
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/src/ReadIntent"
+        "cwd": "${workspaceFolder}/src/Tests"
       }
     },
     {

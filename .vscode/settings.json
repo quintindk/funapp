@@ -4,5 +4,6 @@
   "azureFunctions.projectRuntime": "~4",
   "debug.internalConsoleOptions": "neverOpen",
   "azureFunctions.preDeployTask": "publish (functions)",
-  "azureFunctions.projectSubpath": "src/ReadIntent"
+  "azureFunctions.projectSubpath": "src/ReadIntent",
+  "dotnet-test-explorer.testProjectPath": "src/Tests/Tests.csproj"
 }

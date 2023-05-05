@@ -13,7 +13,7 @@ namespace MyNamespace
   {
     public override void Configure(IFunctionsHostBuilder builder)
     {
-      builder.Services.AddDbContext<DataAccess.SqliteBloggingContext>();
+      builder.Services.AddDbContext<DataAccess.BloggingContext, DataAccess.SqliteBloggingContext>();
     }
   }
 }

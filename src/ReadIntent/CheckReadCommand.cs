@@ -9,58 +9,124 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using Model;
+using DataAccess;
 
 namespace ReadIntent
 {
   public class CheckReadCommand
   {
     private readonly IConfiguration _configuration;
-    
-    public CheckReadCommand(IConfiguration configuration)
+    private readonly BloggingContext _bloggingContext;
+
+    public CheckReadCommand(IConfiguration configuration, BloggingContext bloggingContext)
     {
       _configuration = configuration;
+      _bloggingContext = bloggingContext;
     }
 
-    [FunctionName("CheckReadCommandWithIntent")]
-    public async Task<IActionResult> CheckReadCommandWithIntent(
+    [FunctionName("ReadBlogPosts")]
+    public async Task<IActionResult> ReadBlogPosts(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
     {
-      log.LogInformation("C# HTTP trigger function processed a request.");
+      log.LogInformation("ReadBlogPosts function processed a request.");
 
+      string blogName = req.Query["blog"];
+      if (string.IsNullOrEmpty(blogName)) {
+        return new NotFoundResult();  
+      }
 
-      string name = req.Query["name"];
-
+      string title = null;
       string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-      dynamic data = JsonConvert.DeserializeObject(requestBody);
-      name = name ?? data?.name;
+      if (!string.IsNullOrEmpty(requestBody)) {
+        dynamic post = JsonConvert.DeserializeObject(requestBody);
+        title = post.Title;
+        if (string.IsNullOrEmpty(title)) {
+          return new BadRequestObjectResult("Missing Title in request body");  
+        }
+      }
 
-      string responseMessage = string.IsNullOrEmpty(name)
-          ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-          : $"Hello, {name}. This HTTP triggered function executed successfully.";
+      var blog = _bloggingContext.Blogs.FirstOrDefault(x => x.Name == blogName);
+      if (blog == null) {
+        return new NotFoundResult();
+      }
 
-      return new OkObjectResult(responseMessage);
+      if (string.IsNullOrEmpty(title)) {
+        return new OkObjectResult(blog.Posts);
+      }
+
+      return new OkObjectResult(blog.Posts.Where(x => x.Title.Contains(title)));
     }
 
-    [FunctionName("CheckWriteCommandWithIntent")]
-    public async Task<IActionResult> CheckWriteCommandWithIntent(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+    [FunctionName("WriteBlogPost")]
+    public async Task<IActionResult> WriteBlogPost(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
         ILogger log)
     {
-      log.LogInformation("C# HTTP trigger function processed a request.");
+      log.LogInformation("WriteBlogPost function processed a request.");
 
-      string name = req.Query["name"];
+      string blogName = req.Query["blog"];
+      if (string.IsNullOrEmpty(blogName)) {
+        return new NotFoundResult();  
+      }
 
       string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-      dynamic data = JsonConvert.DeserializeObject(requestBody);
-      name = name ?? data?.name;
+      if (string.IsNullOrEmpty(requestBody)) {
+        return new BadRequestObjectResult("Missing request body");  
+      }
 
-      string responseMessage = string.IsNullOrEmpty(name)
-          ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-          : $"Hello, {name}. This HTTP triggered function executed successfully.";
+      int? postId = null;
+      dynamic post = JsonConvert.DeserializeObject(requestBody);
+      string stringPostId = post.PostId;
+      string postTitle = post.Title;
+      string postContent = post.Content;
+      if (string.IsNullOrEmpty(postTitle) || string.IsNullOrEmpty(postContent)) {
+        return new BadRequestObjectResult("Missing Title or Content in request body");  
+      }
+      if (!string.IsNullOrEmpty(stringPostId)) {
+        if (int.TryParse(stringPostId, out int parsedInt)) {
+          postId = parsedInt;
+        }
+      }
 
-      return new OkObjectResult(responseMessage);
+      var dbBlog = _bloggingContext.Blogs.FirstOrDefault(x => x.Name == blogName);
+      if (dbBlog == null) {
+        _bloggingContext.Blogs.Add(new Blog
+        {
+          Name = blogName
+        });
+        _bloggingContext.SaveChanges();
+
+        dbBlog = _bloggingContext.Blogs.FirstOrDefault(x => x.Name == blogName);
+      }
+
+      if (dbBlog == null) {
+        throw new Exception("Failed to create the Blog");
+      }
+
+      Post dbPost;
+      if (postId == null) {
+        _bloggingContext.Posts.Add(new Post {
+          Title = post.Title,
+          Content = post.Content,
+          BlogId = dbBlog.BlogId
+        });
+        _bloggingContext.SaveChanges();
+
+        dbPost = _bloggingContext.Posts.FirstOrDefault(x => x.Title == blogName);
+      } else {
+        dbPost = _bloggingContext.Posts.FirstOrDefault(x => x.PostId == postId);
+        if (dbPost == null) {
+          return new NotFoundResult();
+        }
+        dbPost.Content = post.Content;
+        _bloggingContext.SaveChanges();
+
+        dbPost = _bloggingContext.Posts.FirstOrDefault(x => x.PostId == postId);
+      }
+
+      return new OkObjectResult(new { Blog = dbBlog, Post = dbPost});
     }
-
   }
 }

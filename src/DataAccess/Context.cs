@@ -5,8 +5,8 @@ namespace DataAccess
 {
   public abstract class BloggingContext : DbContext
   {
-    public DbSet<Blog>? Blogs { get; set; }
+    public virtual DbSet<Blog>? Blogs { get; set; }
 
-    public DbSet<Post>? Posts { get; set; }
+    public virtual DbSet<Post>? Posts { get; set; }
   }
 }

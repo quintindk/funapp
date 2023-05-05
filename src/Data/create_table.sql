@@ -4,7 +4,7 @@ CREATE TABLE Blogs(
 );
 
 CREATE TABLE Posts(
-   PostId INT PRIMARY KEY NOT NULL,
+   PostId INT PRIMARY KEY AUTOINCREMENT NOT NULL,
    [Name] TEXT,
    [Title] TEXT,
    [Content] TEXT,
