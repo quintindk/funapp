@@ -26,7 +26,6 @@ jobs:
       arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
       publishTestResults: true
       workingDirectory: ${{ parameters.working_dir }}
-      projects: 'Tests/Tests.csproj' # update with your test project directory
     
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage report'
