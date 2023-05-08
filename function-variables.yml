@@ -1,7 +1,7 @@
 variables:
   framework: dotnet
 
-  ${{ if eq( variables['Build.SourceBranch'], 'main' ) }}:
+  ${{ if eq( variables['Build.SourceBranch'], 'refs/heads/main' ) }}:
     app_name: "func-linux-readintent-prd"
     environment: Production
     subscription: Production
