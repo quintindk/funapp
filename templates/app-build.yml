@@ -6,11 +6,34 @@ jobs:
 - job: BuildAndTest
   displayName: Build and Test
   steps:
-  - script: |
-      cd ${{ parameters.working_dir }}
-      dotnet restore
-      dotnet build --configuration Release
+  - task: UseDotNet@2
+    displayName: 'install dotnet 6.x'
+    inputs:
+      version: 6.x
+      performMultiLevelLookup: true
+
   - task: DotNetCoreCLI@2
+    displayName: 'dotnet build'
+    inputs:
+      command: 'build'
+      workingDirectory: ${{ parameters.working_dir }}
+    
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: 'test'
+      arguments: '--collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+      publishTestResults: true
+      workingDirectory: ${{ parameters.working_dir }}
+    
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage report'
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet publish'
     inputs:
       command: publish
       arguments: '--configuration Release --output publish_output'
@@ -19,12 +42,14 @@ jobs:
       modifyOutputPath: false
       zipAfterPublish: false
       workingDirectory: ${{ parameters.working_dir }}
+
   - task: ArchiveFiles@2
     displayName: "Archive files"
     inputs:
       rootFolderOrFile: "$(System.DefaultWorkingDirectory)/${{ parameters.working_dir }}/publish_output"
       includeRootFolder: false
       archiveFile: "$(System.DefaultWorkingDirectory)/${{ parameters.working_dir }}/build$(Build.BuildId).zip"
+      
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: "$(System.DefaultWorkingDirectory)/${{ parameters.working_dir }}/build$(Build.BuildId).zip"
