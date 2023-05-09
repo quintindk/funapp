@@ -1,7 +1,7 @@
 variables:
   base_name: readintent
 
-  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+  ${{ if or(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/dev')) }}:
     subscription: Development
     environment: Development
     environment_abbr: dev
