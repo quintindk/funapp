@@ -11,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Model;
 using DataAccess;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace ReadIntent
 {
@@ -26,6 +29,10 @@ namespace ReadIntent
     }
 
     [FunctionName("ReadBlogPosts")]
+    [OpenApiOperation(operationId: "ReadBlogPosts", tags: new[] { "blog" })] 
+    [OpenApiParameter(name: "blog", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The name of the Blog you want to retrieve.")] 
+    [OpenApiRequestBody(contentType: "application/json", typeof(string))]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")] 
     public async Task<IActionResult> ReadBlogPosts(
         [HttpTrigger(AuthorizationLevel.Admin, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
@@ -60,6 +67,10 @@ namespace ReadIntent
     }
 
     [FunctionName("WriteBlogPost")]
+    [OpenApiOperation(operationId: "WriteBlogPost", tags: new[] { "blog" })] 
+    [OpenApiParameter(name: "blog", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The name of the Blog you want to update or create")] 
+    [OpenApiRequestBody(contentType: "application/json", typeof(Post))]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")] 
     public async Task<IActionResult> WriteBlogPost(
         [HttpTrigger(AuthorizationLevel.Admin, "post", Route = null)] HttpRequest req,
         ILogger log)
