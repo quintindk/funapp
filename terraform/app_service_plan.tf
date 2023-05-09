@@ -75,6 +75,6 @@ data "azurerm_function_app_host_keys" "admin_key" {
 
 resource "azurerm_key_vault_secret" "admin_key" {
   name = "admin-api-key"
-  value = data.azurerm_function_app_host_keys.admin_key.value
+  value = data.azurerm_function_app_host_keys.admin_key.default_function_key
   key_vault_id = azurerm_key_vault.kv.id
 }
