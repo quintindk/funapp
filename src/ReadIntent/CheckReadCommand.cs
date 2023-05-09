@@ -27,7 +27,7 @@ namespace ReadIntent
 
     [FunctionName("ReadBlogPosts")]
     public async Task<IActionResult> ReadBlogPosts(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Admin, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
     {
       log.LogInformation("ReadBlogPosts function processed a request.");
@@ -61,7 +61,7 @@ namespace ReadIntent
 
     [FunctionName("WriteBlogPost")]
     public async Task<IActionResult> WriteBlogPost(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Admin, "post", Route = null)] HttpRequest req,
         ILogger log)
     {
       log.LogInformation("WriteBlogPost function processed a request.");
