@@ -25,6 +25,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\ReadIntent\ReadIntent.csproj" />
+    <ProjectReference Include="..\API\API.csproj" />
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@
       "type": "process",
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/src/ReadIntent"
+        "cwd": "${workspaceFolder}/src/API"
       }
     },
     {
@@ -47,7 +47,7 @@
       "type": "process",
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/src/ReadIntent"
+        "cwd": "${workspaceFolder}/src/API"
       }
     },
     {
@@ -64,14 +64,14 @@
       "dependsOn": "clean release (functions)",
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/src/ReadIntent"
+        "cwd": "${workspaceFolder}/src/API"
       }
     },
     {
       "type": "func",
       "dependsOn": "build (functions)",
       "options": {
-        "cwd": "${workspaceFolder}/src/ReadIntent/bin/Debug/net6.0"
+        "cwd": "${workspaceFolder}/src/API/bin/Debug/net6.0"
       },
       "command": "host start",
       "isBackground": true,

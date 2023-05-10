@@ -2,13 +2,13 @@ variables:
   framework: dotnet
 
   ${{ if eq( variables['Build.SourceBranch'], 'refs/heads/main' ) }}:
-    app_name: "func-linux-readintent-prd"
+    app_name: "func-linux-blogsapi-prd"
     environment: Production
     subscription: Production
-    resource_group_name: "rg-readintent-prod-01"
+    resource_group_name: "rg-blogsapi-prod-01"
     
   ${{ if eq( variables['Build.Reason'], 'PullRequest') }}:
-    app_name: "func-linux-readintent-dev"
+    app_name: "func-linux-blogsapi-dev"
     environment: Development
     subscription: Development
-    resource_group_name: "rg-readintent-dev-01"
+    resource_group_name: "rg-blogsapi-dev-01"

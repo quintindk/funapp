@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using DataAccess;
-using ReadIntent;
+using API;
 using Moq;
 using System.Collections.Specialized;
 using System.Web;
@@ -26,9 +26,9 @@ public class WriteBlogPost_Tests
     var mockHttpContext = new Mock<HttpContext>();
     mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
 
-    var readIntent = new CheckReadCommand(config.Object, mockContext.Object);
+    var blogsApi = new BlogsAPI(config.Object, mockContext.Object);
     //Act
-    var result = readIntent.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
+    var result = blogsApi.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
     result.Wait();
 
     //Assert
@@ -47,9 +47,9 @@ public class WriteBlogPost_Tests
     var mockHttpContext = new Mock<HttpContext>();
     mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
 
-    var readIntent = new CheckReadCommand(config.Object, mockContext.Object);
+    var blogsApi = new BlogsAPI(config.Object, mockContext.Object);
     //Act
-    var result = readIntent.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
+    var result = blogsApi.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
     result.Wait();
 
     //Assert
@@ -77,9 +77,9 @@ public class WriteBlogPost_Tests
     var mockHttpContext = new Mock<HttpContext>();
     mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
 
-    var readIntent = new CheckReadCommand(config.Object, mockContext.Object);
+    var blogsApi = new BlogsAPI(config.Object, mockContext.Object);
     //Act
-    var result = readIntent.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
+    var result = blogsApi.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
     result.Wait();
 
     //Assert
@@ -107,9 +107,9 @@ public class WriteBlogPost_Tests
     var mockHttpContext = new Mock<HttpContext>();
     mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
 
-    var readIntent = new CheckReadCommand(config.Object, mockContext.Object);
+    var blogsApi = new BlogsAPI(config.Object, mockContext.Object);
     //Act
-    var result = readIntent.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
+    var result = blogsApi.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
     result.Wait();
 
     //Assert
@@ -165,9 +165,9 @@ public class WriteBlogPost_Tests
     var mockHttpContext = new Mock<HttpContext>();
     mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
 
-    var readIntent = new CheckReadCommand(config.Object, mockContext.Object);
+    var blogsApi = new BlogsAPI(config.Object, mockContext.Object);
     //Act
-    var result = readIntent.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
+    var result = blogsApi.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
     result.Wait();
 
     //Assert
@@ -223,9 +223,9 @@ public class WriteBlogPost_Tests
     var mockHttpContext = new Mock<HttpContext>();
     mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
 
-    var readIntent = new CheckReadCommand(config.Object, mockContext.Object);
+    var blogsApi = new BlogsAPI(config.Object, mockContext.Object);
     //Act
-    var result = readIntent.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
+    var result = blogsApi.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
     result.Wait();
 
     //Assert
@@ -281,9 +281,9 @@ public class WriteBlogPost_Tests
     var mockHttpContext = new Mock<HttpContext>();
     mockHttpContext.Setup(c => c.Request).Returns(mockRequest.Object);
 
-    var readIntent = new CheckReadCommand(config.Object, mockContext.Object);
+    var blogsApi = new BlogsAPI(config.Object, mockContext.Object);
     //Act
-    var result = readIntent.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
+    var result = blogsApi.WriteBlogPost(mockHttpContext.Object.Request, logger.Object);
     result.Wait();
 
     //Assert

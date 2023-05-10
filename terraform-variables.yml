@@ -1,5 +1,5 @@
 variables:
-  base_name: readintent
+  base_name: blogsapi
 
   ${{ if or(eq(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/dev')) }}:
     subscription: Development

@@ -55,7 +55,7 @@ stages:
           resource_group_name: $(resource_group_name)
           storage_account_name: $(storage_account_name)
           container_name: tfstate
-          key: readintent.tfstate
+          key: blogsapi.tfstate
   
       condition: succeeded()
     
