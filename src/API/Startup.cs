@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting.Internal;
 
-[assembly: FunctionsStartup(typeof(MyNamespace.Startup))]
+[assembly: FunctionsStartup(typeof(API.Startup))]
 
-namespace MyNamespace
+namespace API
 {
   public class Startup : FunctionsStartup
   {

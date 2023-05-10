@@ -67,3 +67,14 @@ resource "azurerm_linux_function_app_slot" "staging" {
 
   tags = var.tags
 }
+
+data "azurerm_function_app_host_keys" "admin_key" {
+  name                = azurerm_linux_function_app.func_linux.name
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_key_vault_secret" "admin_key" {
+  name = "admin-api-key"
+  value = data.azurerm_function_app_host_keys.admin_key.default_function_key
+  key_vault_id = azurerm_key_vault.kv.id
+}

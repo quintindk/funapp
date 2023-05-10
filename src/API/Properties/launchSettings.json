@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ReadIntent": {
+    "API": {
       "commandName": "Project",
       "commandLineArgs": "--port 7234",
       "launchBrowser": false

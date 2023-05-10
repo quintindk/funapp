@@ -11,23 +11,30 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Model;
 using DataAccess;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
-namespace ReadIntent
+namespace API
 {
-  public class CheckReadCommand
+  public class BlogsAPI
   {
     private readonly IConfiguration _configuration;
     private readonly BloggingContext _bloggingContext;
 
-    public CheckReadCommand(IConfiguration configuration, BloggingContext bloggingContext)
+    public BlogsAPI(IConfiguration configuration, BloggingContext bloggingContext)
     {
       _configuration = configuration;
       _bloggingContext = bloggingContext;
     }
 
     [FunctionName("ReadBlogPosts")]
+    [OpenApiOperation(operationId: "ReadBlogPosts", tags: new[] { "blog" })] 
+    [OpenApiParameter(name: "blog", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The name of the Blog you want to retrieve.")] 
+    [OpenApiRequestBody(contentType: "application/json", typeof(string))]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")] 
     public async Task<IActionResult> ReadBlogPosts(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Admin, "get", "post", Route = null)] HttpRequest req,
         ILogger log)
     {
       log.LogInformation("ReadBlogPosts function processed a request.");
@@ -60,8 +67,12 @@ namespace ReadIntent
     }
 
     [FunctionName("WriteBlogPost")]
+    [OpenApiOperation(operationId: "WriteBlogPost", tags: new[] { "blog" })] 
+    [OpenApiParameter(name: "blog", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The name of the Blog you want to update or create")] 
+    [OpenApiRequestBody(contentType: "application/json", typeof(Post))]
+    [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")] 
     public async Task<IActionResult> WriteBlogPost(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Admin, "post", Route = null)] HttpRequest req,
         ILogger log)
     {
       log.LogInformation("WriteBlogPost function processed a request.");

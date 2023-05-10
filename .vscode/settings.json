@@ -1,9 +1,9 @@
 {
-  "azureFunctions.deploySubpath": "ReadIntent/bin/Release/net6.0/publish",
+  "azureFunctions.deploySubpath": "src/API/bin/Release/net6.0/publish",
   "azureFunctions.projectLanguage": "C#",
   "azureFunctions.projectRuntime": "~4",
   "debug.internalConsoleOptions": "neverOpen",
   "azureFunctions.preDeployTask": "publish (functions)",
-  "azureFunctions.projectSubpath": "src/ReadIntent",
+  "azureFunctions.projectSubpath": "src/API",
   "dotnet-test-explorer.testProjectPath": "src/Tests/Tests.csproj"
 }
